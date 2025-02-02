@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #ffcccb;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        .envelope {
+            position: absolute;
+            width: 100px;
+            top: 100px;
+            left: -150px;
+            transition: transform 2s linear;
+        }
+        .mail-truck, .plane {
+            position: absolute;
+            width: 120px;
+            opacity: 0;
+        }
+        .mail-truck {
+            top: 200px;
+            left: -200px;
+        }
+        .plane {
+            top: 150px;
+            left: 20%;
+        }
+        .house {
+            position: absolute;
+            width: 150px;
+            bottom: 50px;
+            left: 80%;
+            opacity: 0;
+        }
+        .valentine-card {
+            position: absolute;
+            width: 250px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        .question {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d10000;
+            opacity: 0;
+        }
+        .buttons {
+            margin-top: 20px;
+            display: none;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .yes {
+            background-color: #28a745;
+            color: white;
+        }
+        .no {
+            background-color: #dc3545;
+            color: white;
+        }
+        .yes-multiple {
+            position: absolute;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            position: absolute;
+        }
+        .celebration {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="envelope.png" class="envelope" id="envelope">
+    <img src="mail-truck.png" class="mail-truck" id="mailTruck">
+    <img src="plane.png" class="plane" id="plane">
+    <img src="house.png" class="house" id="house">
+</div>
+
+<div class="valentine-card" id="card">
+    <h1 class="question" id="question">Will you be my Valentine?</h1>
+    <div class="buttons" id="buttons">
+        <button class="btn yes" onclick="yesClicked()">Yes!</button>
+        <button class="btn no">No</button>
+    </div>
+</div>
+
+<div class="celebration" id="celebration">
+    <h1>🎉 Yay! Can't wait to celebrate with you! 🎈</h1>
+</div>
+
+<script>
+    function startAnimation() {
+        let envelope = document.getElementById("envelope");
+        let mailTruck = document.getElementById("mailTruck");
+        let plane = document.getElementById("plane");
+        let house = document.getElementById("house");
+        let card = document.getElementById("card");
+        let question = document.getElementById("question");
+        let buttons = document.getElementById("buttons");
+        
+        // Envelope moves to the mail truck
+        envelope.style.transform = "translateX(250px)";
+        setTimeout(() => {
+            envelope.style.opacity = 0;
+            mailTruck.style.opacity = 1;
+            mailTruck.style.transform = "translateX(300px)";
+        }, 2000);
+        
+        // Mail truck goes to the airport, then the plane takes off
+        setTimeout(() => {
+            mailTruck.style.opacity = 0;
+            plane.style.opacity = 1;
+            plane.style.transform = "translateX(300px) translateY(-50px)";
+        }, 4000);
+        
+        // Plane lands, another truck picks it up
+        setTimeout(() => {
+            plane.style.opacity = 0;
+            house.style.opacity = 1;
+        }, 6000);
+        
+        // Envelope arrives at the house, card appears
+        setTimeout(() => {
+            house.style.opacity = 0;
+            card.style.display = "block";
+            typeQuestion(question);
+        }, 8000);
+    }
+
+    function typeQuestion(element) {
+        let text = "Will you be my Valentine?";
+        let i = 0;
+        element.style.opacity = 1;
+        let interval = setInterval(() => {
+            if (i < text.length) {
+                element.textContent += text[i];
+                i++;
+            } else {
+                clearInterval(interval);
+                setTimeout(() => {
+                    document.getElementById("buttons").style.display = "block";
+                    addYesButtons();
+                }, 2000);
+            }
+        }, 100);
+    }
+
+    function addYesButtons() {
+        setTimeout(() => {
+            for (let i = 0; i < 10; i++) {
+                let btn = document.createElement("button");
+                btn.classList.add("yes-multiple");
+                btn.textContent = "Yes!";
+                btn.style.top = `${Math.random() * 80 + 10}%`;
+                btn.style.left = `${Math.random() * 80 + 10}%`;
+                btn.onclick = yesClicked;
+                document.body.appendChild(btn);
+            }
+        }, 3000);
+    }
+
+    function yesClicked() {
+        document.getElementById("celebration").style.display = "block";
+    }
+
+    // Start animation on load
+    window.onload = startAnimation;
+</script>
+
+</body>
+</html>
