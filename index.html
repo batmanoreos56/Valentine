@@ -26,7 +26,7 @@
             transition: transform 2s linear;
         }
 
-        .mail-truck, .plane {
+        .mail-truck, .plane, .house, .new-house, .map1, .map2 {
             position: absolute;
             width: 120px;
             opacity: 0;
@@ -43,11 +43,25 @@
         }
 
         .house {
-            position: absolute;
-            width: 150px;
+            bottom: 50px;
+            left: 5%;
+        }
+
+        .new-house {
             bottom: 50px;
             left: 80%;
-            opacity: 0;
+        }
+
+        .map1 {
+            top: 50%;
+            left: 20%;
+            transform: translate(-50%, -50%);
+        }
+
+        .map2 {
+            top: 50%;
+            left: 80%;
+            transform: translate(-50%, -50%);
         }
 
         .valentine-card {
@@ -122,6 +136,9 @@
     <img src="mail-truck.png" class="mail-truck" id="mailTruck">
     <img src="plane.png" class="plane" id="plane">
     <img src="house.png" class="house" id="house">
+    <img src="map1.png" class="map1" id="map1">
+    <img src="map2.png" class="map2" id="map2">
+    <img src="house.png" class="new-house" id="newHouse">
 </div>
 
 <div class="valentine-card" id="card">
@@ -142,6 +159,9 @@
         let mailTruck = document.getElementById("mailTruck");
         let plane = document.getElementById("plane");
         let house = document.getElementById("house");
+        let map1 = document.getElementById("map1");
+        let map2 = document.getElementById("map2");
+        let newHouse = document.getElementById("newHouse");
         let card = document.getElementById("card");
         let question = document.getElementById("question");
         let buttons = document.getElementById("buttons");
@@ -161,18 +181,30 @@
             plane.style.transform = "translateX(300px) translateY(-50px)";
         }, 4000);
 
-        // Plane lands, another truck picks it up
+        // Plane flies from Philadelphia to Cooper City
         setTimeout(() => {
             plane.style.opacity = 0;
-            house.style.opacity = 1;
+            map1.style.opacity = 1;
         }, 6000);
 
-        // Envelope arrives at the house, card appears
         setTimeout(() => {
-            house.style.opacity = 0;
-            card.style.display = "block";
-            typeQuestion(question);
+            map1.style.opacity = 0;
+            map2.style.opacity = 1;
+        }, 7000);
+
+        // Plane lands, another truck picks it up
+        setTimeout(() => {
+            map2.style.opacity = 0;
+            newHouse.style.opacity = 1;
         }, 8000);
+
+        // Envelope arrives at the new house, card appears
+        setTimeout(() => {
+            newHouse.style.opacity = 0;
+            card.style.display = "block";
+            card.style.transform = "scale(1.2)";
+            typeQuestion(question);
+        }, 9000);
     }
 
     function typeQuestion(element) {
