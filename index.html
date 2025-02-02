@@ -11,21 +11,66 @@
             background-color: #ffcccb;
             overflow: hidden;
         }
+
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .envelope {
+            position: absolute;
+            width: 100px;
+            top: 50px;
+            left: -150px;
+            transition: transform 2s linear;
+        }
+
+        .mail-truck, .plane {
+            position: absolute;
+            width: 120px;
+            opacity: 0;
+        }
+
+        .mail-truck {
+            top: 200px;
+            left: -200px;
+        }
+
+        .plane {
+            top: 150px;
+            left: 20%;
+        }
+
+        .house {
+            position: absolute;
+            width: 150px;
+            bottom: 50px;
+            left: 80%;
+            opacity: 0;
+        }
+
         .valentine-card {
             position: absolute;
             width: 300px;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            display: none;
         }
+
         .question {
             font-size: 24px;
             font-weight: bold;
             color: #d10000;
+            opacity: 0;
         }
+
         .buttons {
             margin-top: 20px;
+            display: none;
         }
+
         .btn {
             padding: 10px 20px;
             font-size: 18px;
@@ -36,14 +81,17 @@
             opacity: 0;
             transition: opacity 1s ease-in;
         }
+
         .yes {
             background-color: #28a745;
             color: white;
         }
+
         .no {
             background-color: #dc3545;
             color: white;
         }
+
         .yes-multiple {
             position: absolute;
             background-color: #28a745;
@@ -54,6 +102,7 @@
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
         }
+
         .celebration {
             display: none;
             position: absolute;
@@ -68,9 +117,16 @@
 </head>
 <body>
 
-<div class="valentine-card">
-    <h1 class="question">Will you be my Valentine?</h1>
-    <div class="buttons">
+<div class="container">
+    <img src="envelope.png" class="envelope" id="envelope">
+    <img src="mail-truck.png" class="mail-truck" id="mailTruck">
+    <img src="plane.png" class="plane" id="plane">
+    <img src="house.png" class="house" id="house">
+</div>
+
+<div class="valentine-card" id="card">
+    <h1 class="question" id="question"></h1>
+    <div class="buttons" id="buttons">
         <button class="btn yes" id="yesBtn" onclick="yesClicked()">Yes!</button>
         <button class="btn no" id="noBtn">No</button>
     </div>
@@ -81,24 +137,65 @@
 </div>
 
 <script>
-    function startAnimations() {
-        let yesBtn = document.getElementById("yesBtn");
-        let noBtn = document.getElementById("noBtn");
+    function startAnimation() {
+        let envelope = document.getElementById("envelope");
+        let mailTruck = document.getElementById("mailTruck");
+        let plane = document.getElementById("plane");
+        let house = document.getElementById("house");
+        let card = document.getElementById("card");
+        let question = document.getElementById("question");
+        let buttons = document.getElementById("buttons");
 
-        // Fade in the "Yes" button first
+        // Envelope moves to the mail truck
+        envelope.style.transform = "translateX(250px)";
         setTimeout(() => {
-            yesBtn.style.opacity = "1";
-        }, 1000);
+            envelope.style.opacity = 0;
+            mailTruck.style.opacity = 1;
+            mailTruck.style.transform = "translateX(300px)";
+        }, 2000);
 
-        // Fade in the "No" button 2 seconds after the first "Yes" button
+        // Mail truck goes to the airport, then the plane takes off
         setTimeout(() => {
-            noBtn.style.opacity = "1";
-        }, 3000);
+            mailTruck.style.opacity = 0;
+            plane.style.opacity = 1;
+            plane.style.transform = "translateX(300px) translateY(-50px)";
+        }, 4000);
 
-        // Start generating multiple Yes buttons after 3-second delay (after No appears)
+        // Plane lands, another truck picks it up
         setTimeout(() => {
-            generateYesButtons();
+            plane.style.opacity = 0;
+            house.style.opacity = 1;
         }, 6000);
+
+        // Envelope arrives at the house, card appears
+        setTimeout(() => {
+            house.style.opacity = 0;
+            card.style.display = "block";
+            typeQuestion(question);
+        }, 8000);
+    }
+
+    function typeQuestion(element) {
+        let text = "Will you be my Valentine?";
+        let i = 0;
+        element.style.opacity = 1;
+        let interval = setInterval(() => {
+            if (i < text.length) {
+                element.textContent += text[i];
+                i++;
+            } else {
+                clearInterval(interval);
+                setTimeout(() => {
+                    document.getElementById("yesBtn").style.opacity = "1";
+                    setTimeout(() => {
+                        document.getElementById("noBtn").style.opacity = "1";
+                        setTimeout(() => {
+                            generateYesButtons();
+                        }, 3000);
+                    }, 2000);
+                }, 500);
+            }
+        }, 100);
     }
 
     function generateYesButtons() {
@@ -133,7 +230,8 @@
         document.getElementById("celebration").style.display = "block";
     }
 
-    window.onload = startAnimations;
+    // Start animation on load
+    window.onload = startAnimation;
 </script>
 
 </body>
